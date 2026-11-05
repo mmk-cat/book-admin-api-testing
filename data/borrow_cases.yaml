@@ -1,0 +1,10 @@
+borrow_invalid:
+  - {id: BORROW-NEG-001, title: 借阅数量为 0, target: fresh, payload: {quantity: 0}, status: 400, code: 40001, field: quantity}
+  - {id: BORROW-NEG-002, title: 借阅数量为负数, target: fresh, payload: {quantity: -1}, status: 400, code: 40001, field: quantity}
+  - {id: BORROW-NEG-003, title: 单次借阅超过 5 本, target: fresh, payload: {quantity: 6}, status: 400, code: 40001, field: quantity}
+  - {id: BORROW-NEG-004, title: 借阅数量为字符串, target: fresh, payload: {quantity: "2"}, status: 400, code: 40001, field: quantity}
+  - {id: BORROW-NEG-005, title: 借阅数量为布尔值, target: fresh, payload: {quantity: true}, status: 400, code: 40001, field: quantity}
+  - {id: BORROW-NEG-006, title: 借阅不存在的图书, target: missing, payload: {quantity: 1}, status: 404, code: 40401}
+  - {id: BORROW-NEG-007, title: 借阅已下架图书, target: off_shelf, payload: {quantity: 1}, status: 409, code: 40903}
+  - {id: BORROW-NEG-008, title: 借阅零库存图书, target: out_of_stock, payload: {quantity: 1}, status: 409, code: 40904}
+  - {id: BORROW-NEG-009, title: 借阅数量超过库存, target: fresh, payload: {quantity: 4}, status: 409, code: 40904}

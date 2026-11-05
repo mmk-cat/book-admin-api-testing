@@ -1,0 +1,46 @@
+default_env: dev
+
+common:
+  http:
+    timeout: 5
+    retries: 2
+    backoff_factor: 0.2
+  auth:
+    token_secret: book-admin-demo-secret
+    ttl_seconds: 3600
+    users:
+      admin:
+        username: admin
+        password: admin123
+      reader:
+        username: reader
+        password: reader123
+      reader2:
+        username: reader2
+        password: reader123
+  server:
+    startup_timeout_seconds: 30
+    health_path: /healthz
+
+environments:
+  dev:
+    description: 本地开发环境（SQLite，零依赖可直接运行）
+    base_url: http://127.0.0.1:5001
+    db:
+      backend: sqlite
+      sqlite_path: runtime/book_admin.db
+    server:
+      auto_start: true
+      port: 5001
+  test:
+    description: 测试环境（MySQL，Jenkins/docker-compose 启动）
+    base_url: http://127.0.0.1:5001
+    db:
+      backend: mysql
+      host: 127.0.0.1
+      port: 3306
+      user: book_admin
+      password: book_admin_pwd
+      database: book_admin
+    server:
+      auto_start: false

@@ -1,0 +1,7 @@
+pytest==9.2.0
+requests==2.34.2
+PyYAML==6.0.3
+PyMySQL==1.2.3
+allure-pytest==2.16.2
+pytest-html==4.2.0
+Flask==3.1.3

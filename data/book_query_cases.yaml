@@ -1,0 +1,91 @@
+list_positive:
+  - id: BOOK-LIST-001
+    title: 默认分页返回第一页 10 条
+    query: {}
+    page: 1
+    page_size: 10
+  - id: BOOK-LIST-002
+    title: 第二页分页参数生效
+    query: {page: 2, page_size: 5}
+    page: 2
+    page_size: 5
+  - id: BOOK-LIST-003
+    title: 按科技分类过滤
+    query: {category: 科技, page_size: 50}
+    page: 1
+    page_size: 50
+    category: 科技
+  - id: BOOK-LIST-004
+    title: 按可借状态过滤
+    query: {status: available, page_size: 50}
+    page: 1
+    page_size: 50
+    status: available
+  - id: BOOK-LIST-005
+    title: 标题关键字检索
+    query: {keyword: Python, page_size: 50}
+    page: 1
+    page_size: 50
+    keyword: Python
+  - id: BOOK-LIST-006
+    title: 作者关键字检索
+    query: {keyword: 刘慈欣, page_size: 50}
+    page: 1
+    page_size: 50
+    keyword: 刘慈欣
+  - id: BOOK-LIST-007
+    title: ISBN 前缀关键字检索
+    query: {keyword: "978711500001", page_size: 50}
+    page: 1
+    page_size: 50
+    keyword: "978711500001"
+  - id: BOOK-LIST-008
+    title: 价格升序排序
+    query: {sort: price, order: asc, page_size: 50}
+    page: 1
+    page_size: 50
+    sort: price
+    order: asc
+  - id: BOOK-LIST-009
+    title: 价格降序排序
+    query: {sort: price, order: desc, page_size: 50}
+    page: 1
+    page_size: 50
+    sort: price
+    order: desc
+  - id: BOOK-LIST-010
+    title: 库存升序排序
+    query: {sort: stock, order: asc, page_size: 50}
+    page: 1
+    page_size: 50
+    sort: stock
+    order: asc
+  - id: BOOK-LIST-011
+    title: 分类、状态、排序组合查询
+    query: {category: 科技, status: available, sort: stock, order: desc, page_size: 50}
+    page: 1
+    page_size: 50
+    category: 科技
+    status: available
+    sort: stock
+    order: desc
+  - id: BOOK-LIST-012
+    title: 页码超过总页数返回空列表
+    query: {page: 9999, page_size: 10}
+    page: 9999
+    page_size: 10
+    empty: true
+
+list_invalid:
+  - {id: BOOK-LIST-013, title: page 为 0, query: {page: 0}, status: 400, code: 40001}
+  - {id: BOOK-LIST-014, title: page 为负数, query: {page: -1}, status: 400, code: 40001}
+  - {id: BOOK-LIST-015, title: page 为字母, query: {page: abc}, status: 400, code: 40001}
+  - {id: BOOK-LIST-016, title: page 为小数, query: {page: "1.5"}, status: 400, code: 40001}
+  - {id: BOOK-LIST-017, title: page_size 为 0, query: {page_size: 0}, status: 400, code: 40001}
+  - {id: BOOK-LIST-018, title: page_size 超过上限 50, query: {page_size: 51}, status: 400, code: 40001}
+  - {id: BOOK-LIST-019, title: page_size 为字母, query: {page_size: abc}, status: 400, code: 40001}
+  - {id: BOOK-LIST-020, title: sort 不在白名单, query: {sort: created_by}, status: 400, code: 40001}
+  - {id: BOOK-LIST-021, title: order 非法, query: {order: sideways}, status: 400, code: 40001}
+  - {id: BOOK-LIST-022, title: category 非法, query: {category: 不存在的分类}, status: 400, code: 40001}
+  - {id: BOOK-LIST-023, title: status 非法, query: {status: lost}, status: 400, code: 40001}
+  - {id: BOOK-LIST-024, title: keyword 超过 50 字符, query: {keyword: "${KEYWORD_51}"}, status: 400, code: 40001}

@@ -1,0 +1,85 @@
+login_positive:
+  - id: AUTH-LOGIN-001
+    title: 管理员账号登录成功并返回 Token
+    username: admin
+    password: admin123
+    role: admin
+  - id: AUTH-LOGIN-002
+    title: 读者账号登录成功并返回 Token
+    username: reader
+    password: reader123
+    role: reader
+
+login_negative:
+  - id: AUTH-LOGIN-003
+    title: 密码错误返回 401
+    payload: {username: admin, password: wrong-password}
+    status: 401
+    code: 40110
+  - id: AUTH-LOGIN-004
+    title: 用户不存在返回 401
+    payload: {username: no_such_user, password: whatever}
+    status: 401
+    code: 40110
+  - id: AUTH-LOGIN-005
+    title: 禁用账号登录返回 403
+    payload: {username: disabled, password: disabled123}
+    status: 403
+    code: 40302
+  - id: AUTH-LOGIN-006
+    title: 缺少 username 返回缺参错误
+    payload: {password: admin123}
+    status: 400
+    code: 40002
+  - id: AUTH-LOGIN-007
+    title: 缺少 password 返回缺参错误
+    payload: {username: admin}
+    status: 400
+    code: 40002
+  - id: AUTH-LOGIN-008
+    title: username 为 null 返回类型错误
+    payload: {username: null, password: admin123}
+    status: 400
+    code: 40001
+    field: username
+  - id: AUTH-LOGIN-009
+    title: password 为 null 返回类型错误
+    payload: {username: admin, password: null}
+    status: 400
+    code: 40001
+    field: password
+  - id: AUTH-LOGIN-010
+    title: username 为空白字符串返回校验错误
+    payload: {username: "   ", password: admin123}
+    status: 400
+    code: 40001
+    field: username
+  - id: AUTH-LOGIN-011
+    title: password 为空字符串返回校验错误
+    payload: {username: admin, password: ""}
+    status: 400
+    code: 40001
+    field: password
+  - id: AUTH-LOGIN-012
+    title: username 传入数字返回类型错误
+    payload: {username: 123, password: admin123}
+    status: 400
+    code: 40001
+    field: username
+  - id: AUTH-LOGIN-013
+    title: password 传入数字返回类型错误
+    payload: {username: admin, password: 123456}
+    status: 400
+    code: 40001
+    field: password
+  - id: AUTH-LOGIN-014
+    title: username 超长返回长度错误
+    payload: {username: "${LONG_101}", password: admin123}
+    status: 400
+    code: 40001
+    field: username
+  - id: AUTH-LOGIN-015
+    title: SQL 注入字符串不会绕过登录
+    payload: {username: "' OR 1=1 --", password: "anything"}
+    status: 401
+    code: 40110

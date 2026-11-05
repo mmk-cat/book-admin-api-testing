@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    triggers {
+        cron('H 2 * * *') // 每日 02:xx 自动回归
+    }
+
+    options {
+        timestamps()
+        timeout(time: 20, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+    }
+
+    environment {
+        PYTHONUNBUFFERED = '1'
+        API_ENV = 'test'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                sh 'python -m pip install -r requirements.txt'
+            }
+        }
+
+        stage('Start MySQL & API') {
+            steps {
+                sh 'docker compose up -d --build'
+                sh 'python scripts/wait_for_service.py http://127.0.0.1:5001/healthz 120'
+            }
+        }
+
+        stage('API regression') {
+            steps {
+                sh 'python scripts/run_regression.py --env test'
+            }
+        }
+    }
+
+    post {
+        always {
+            junit 'reports/junit.xml'
+            allure includeProperties: false, jdk: '', results: [[path: 'reports/allure-results']]
+            archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
+            sh 'docker compose down -v || true'
+        }
+        failure {
+            echo 'API regression failed; check Allure report and reports/server.log'
+        }
+    }
+}

@@ -1,0 +1,192 @@
+defaults:
+  valid_book: &valid_book
+    isbn: "9787115999000"
+    title: "接口自动化测试实战"
+    author: "测试作者"
+    category: "科技"
+    price: 39.9
+    stock: 3
+
+create_valid:
+  - id: BOOK-CREATE-001
+    title: 合法图书创建成功并落库
+    payload:
+      isbn: "9787115999001"
+      title: "接口自动化测试实战"
+      author: "测试作者"
+      category: "科技"
+      price: 39.9
+      stock: 3
+  - id: BOOK-CREATE-002
+    title: 库存为 0 的图书允许创建
+    payload:
+      isbn: "9787115999002"
+      title: "零库存图书"
+      author: "测试作者"
+      category: "文学"
+      price: 0
+      stock: 0
+  - id: BOOK-CREATE-003
+    title: 中文与两位小数价格正确保存
+    payload:
+      isbn: "9787115999003"
+      title: "数据仓库与质量治理"
+      author: "王测试"
+      category: "经管"
+      price: 88.88
+      stock: 5
+
+create_invalid:
+  - id: BOOK-CREATE-004
+    title: 缺少 title 返回缺参错误
+    payload: {isbn: "9787115999004", author: "测试作者", category: "科技", price: 39.9, stock: 1}
+    status: 400
+    code: 40002
+  - id: BOOK-CREATE-005
+    title: 缺少 author 返回缺参错误
+    payload: {isbn: "9787115999005", title: "缺作者", category: "科技", price: 39.9, stock: 1}
+    status: 400
+    code: 40002
+  - id: BOOK-CREATE-006
+    title: 缺少 isbn 返回缺参错误
+    payload: {title: "缺ISBN", author: "测试作者", category: "科技", price: 39.9, stock: 1}
+    status: 400
+    code: 40002
+  - id: BOOK-CREATE-007
+    title: 缺少 category 返回缺参错误
+    payload: {isbn: "9787115999007", title: "缺分类", author: "测试作者", price: 39.9, stock: 1}
+    status: 400
+    code: 40002
+  - id: BOOK-CREATE-008
+    title: 缺少 price 返回缺参错误
+    payload: {isbn: "9787115999008", title: "缺价格", author: "测试作者", category: "科技", stock: 1}
+    status: 400
+    code: 40002
+  - id: BOOK-CREATE-009
+    title: 缺少 stock 返回缺参错误
+    payload: {isbn: "9787115999009", title: "缺库存", author: "测试作者", category: "科技", price: 39.9}
+    status: 400
+    code: 40002
+  - id: BOOK-CREATE-010
+    title: title 为 null
+    payload: {<<: *valid_book, title: null}
+    status: 400
+    code: 40001
+    field: title
+  - id: BOOK-CREATE-011
+    title: price 为 null
+    payload: {<<: *valid_book, price: null}
+    status: 400
+    code: 40001
+    field: price
+  - id: BOOK-CREATE-012
+    title: title 为空白字符串
+    payload: {<<: *valid_book, title: "   "}
+    status: 400
+    code: 40001
+    field: title
+  - id: BOOK-CREATE-013
+    title: author 为空白字符串
+    payload: {<<: *valid_book, author: "   "}
+    status: 400
+    code: 40001
+    field: author
+  - id: BOOK-CREATE-014
+    title: title 传入数字
+    payload: {<<: *valid_book, title: 123}
+    status: 400
+    code: 40001
+    field: title
+  - id: BOOK-CREATE-015
+    title: category 传入数字
+    payload: {<<: *valid_book, category: 123}
+    status: 400
+    code: 40001
+    field: category
+  - id: BOOK-CREATE-016
+    title: price 传入字符串
+    payload: {<<: *valid_book, price: "39.9"}
+    status: 400
+    code: 40001
+    field: price
+  - id: BOOK-CREATE-017
+    title: stock 传入布尔值
+    payload: {<<: *valid_book, stock: true}
+    status: 400
+    code: 40001
+    field: stock
+  - id: BOOK-CREATE-018
+    title: stock 传入小数
+    payload: {<<: *valid_book, stock: 1.5}
+    status: 400
+    code: 40001
+    field: stock
+  - id: BOOK-CREATE-019
+    title: price 为负数
+    payload: {<<: *valid_book, price: -1}
+    status: 400
+    code: 40001
+    field: price
+  - id: BOOK-CREATE-020
+    title: price 超过上限
+    payload: {<<: *valid_book, price: 10000}
+    status: 400
+    code: 40001
+    field: price
+  - id: BOOK-CREATE-021
+    title: price 超过两位小数
+    payload: {<<: *valid_book, price: 39.999}
+    status: 400
+    code: 40001
+    field: price
+  - id: BOOK-CREATE-022
+    title: stock 为负数
+    payload: {<<: *valid_book, stock: -1}
+    status: 400
+    code: 40001
+    field: stock
+  - id: BOOK-CREATE-023
+    title: stock 超过上限
+    payload: {<<: *valid_book, stock: 1000}
+    status: 400
+    code: 40001
+    field: stock
+  - id: BOOK-CREATE-024
+    title: title 超过 100 字符
+    payload: {<<: *valid_book, title: "${LONG_101}"}
+    status: 400
+    code: 40001
+    field: title
+  - id: BOOK-CREATE-025
+    title: author 超过 50 字符
+    payload: {<<: *valid_book, author: "${LONG_51}"}
+    status: 400
+    code: 40001
+    field: author
+  - id: BOOK-CREATE-026
+    title: ISBN 长度不足
+    payload: {<<: *valid_book, isbn: "12345"}
+    status: 400
+    code: 40001
+    field: isbn
+  - id: BOOK-CREATE-027
+    title: ISBN 含非法字母
+    payload: {<<: *valid_book, isbn: "9787115ABCDE"}
+    status: 400
+    code: 40001
+    field: isbn
+  - id: BOOK-CREATE-028
+    title: category 不在枚举范围
+    payload: {<<: *valid_book, category: "不存在"}
+    status: 400
+    code: 40001
+    field: category
+
+update_invalid:
+  - {id: BOOK-UPDATE-001, title: 更新请求体为空, payload: {}, status: 400, code: 40001}
+  - {id: BOOK-UPDATE-002, title: 只传未知字段视为空更新, payload: {unknown: 1}, status: 400, code: 40001}
+  - {id: BOOK-UPDATE-003, title: title 为 null, payload: {title: null}, status: 400, code: 40001, field: title}
+  - {id: BOOK-UPDATE-004, title: price 为负数, payload: {price: -1}, status: 400, code: 40001, field: price}
+  - {id: BOOK-UPDATE-005, title: stock 超过上限, payload: {stock: 1000}, status: 400, code: 40001, field: stock}
+  - {id: BOOK-UPDATE-006, title: ISBN 非法, payload: {isbn: "123"}, status: 400, code: 40001, field: isbn}
+  - {id: BOOK-UPDATE-007, title: category 类型错误, payload: {category: 123}, status: 400, code: 40001, field: category}
